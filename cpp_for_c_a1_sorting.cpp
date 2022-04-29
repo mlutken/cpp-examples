@@ -2,7 +2,8 @@
 #include "cpp_for_c_a1_sorting.h"
 #include <iostream>
 #include <algorithm>
-#include <parallel/algorithm>
+#include <execution>
+
 #include <memory>
 #include <cstdlib>
 
@@ -39,7 +40,8 @@ void cpp_for_c_a1_sorting_in_c(std::vector<int>&& vec_to_sort)
 
 void cpp_for_c_a1_sorting_in_cpp(std::vector<int>&& vec_to_sort)
 {
-    std::sort(vec_to_sort.begin(), vec_to_sort.end());
+	std::sort(vec_to_sort.begin(), vec_to_sort.end());
+//	std::sort(vec_to_sort.begin(), vec_to_sort.end(),[](int lhs, int rhs) {return lhs < rhs;});
 }
 
 // ------------------------------
@@ -47,7 +49,7 @@ void cpp_for_c_a1_sorting_in_cpp(std::vector<int>&& vec_to_sort)
 // ------------------------------
 void cpp_for_c_a1_sorting_in_cpp_parallel(std::vector<int>&& vec_to_sort)
 {
-//    std::sort(std::execution::par, vec_to_sort.begin(), vec_to_sort.end());
+	std::sort(std::execution::par, vec_to_sort.begin(), vec_to_sort.end());
 }
 
 // ---------------------
@@ -58,8 +60,9 @@ int cpp_for_c_a1_sorting(int /*argc*/, char** /*argv*/)
 {
     cerr << "Sorting in C\n";
     cerr << "RAND_MAX: " << RAND_MAX << "\n";
-    size_t count_to_sort = 100000;
+	size_t count_to_sort = 10000000;
 
+	// Create vector with lots of random integers
     std::vector<int> vec_c;
     vec_c.reserve(count_to_sort);
     while(count_to_sort--) {

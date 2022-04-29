@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.5)
+project(cpp_examples)
+set (main_exe_name "cpp_examples")
 
+cmake_minimum_required(VERSION 3.5)
 project(std_function LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set (OPTIMIZE_FLAGS "-O2 -g")
@@ -17,7 +19,7 @@ endif()
 #set(CMAKE_CXX_FLAGS "${OPTIMIZE_FLAGS}")
 #set(CMAKE_ASM_FLAGS "${OPTIMIZE_FLAGS}" )
 
-add_executable(std_function
+add_executable(${main_exe_name}
     # ---------------
     # --- HEADERS ---
     # ---------------
@@ -62,3 +64,7 @@ add_executable(std_function
     # --- main.cpp ---
     main.cpp
     )
+
+set (link_libs "tbb;pthread" )
+
+target_link_libraries(${main_exe_name} "${link_libs}" )
