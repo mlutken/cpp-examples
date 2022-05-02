@@ -24,7 +24,7 @@ private:
     timer timer_;
 };
 
-int std_function_example1()
+int std_function_example1(int /*argc*/, char** /*argv*/)
 {
     using namespace std::chrono;
     using namespace std::chrono_literals;

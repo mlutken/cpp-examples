@@ -17,6 +17,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    return cpp_for_c_a1_sorting(argc, argv);
+    return std_function_example1(argc, argv);
 }
 
