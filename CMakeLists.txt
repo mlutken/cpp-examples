@@ -1,8 +1,6 @@
 project(cpp_examples)
 set (main_exe_name "cpp_examples")
 
-cmake_minimum_required(VERSION 3.5)
-project(std_function LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,6 +27,7 @@ add_executable(${main_exe_name}
     cpp_for_c_a1_sorting.h
 
     # --- HEADERS: Other C++ examples ---
+    house/solid/our_house.h
     example1.h
     std_function_example1.h
     visitor_example0.h
@@ -51,6 +50,7 @@ add_executable(${main_exe_name}
     cpp_for_c_a1_sorting.cpp
 
     # --- SOURCES: Other C++ examples ---
+    house/solid/our_house.cpp
     example1.cpp
     std_function_example1.cpp
     visitor_example0.cpp

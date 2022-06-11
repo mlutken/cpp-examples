@@ -3,6 +3,8 @@
 #include <iostream>
 #include "timer.h"
 
+// static_ std::function: https://stackoverflow.com/questions/45088723/stdfunction-with-static-allocation-in-c
+
 using namespace std;
 using namespace examples;
 
