@@ -161,12 +161,14 @@ int our_house_example(int , char** )
     // How do we determine which concrtete instances of the abstract interfaces to actually put into our house?
 
     // Create our house
-    dimmer_value_validator dim_validator;
     lamp kitchen_lamp;
-    kitchen_vent kitchen_ventilator;
     button kitchen_light_switch(kitchen_lamp); // Here we sacrificed the default constructor
-    button kitchen_vent_switch(kitchen_ventilator); // Here we sacrificed the default constructor
+    dimmer_value_validator dim_validator;
     dimmer kitchen_light_dimmer(kitchen_lamp, dim_validator);
+
+    kitchen_vent kitchen_ventilator;
+    button kitchen_vent_switch(kitchen_ventilator);
+
     our_house house(kitchen_lamp,
                     kitchen_light_switch,
                     kitchen_light_dimmer,
