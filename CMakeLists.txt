@@ -28,6 +28,7 @@ add_executable(${main_exe_name}
 
     # --- HEADERS: Other C++ examples ---
     house/solid/our_house.h
+    house/dep/my_house.h
     example1.h
     std_function_example1.h
     visitor_example0.h
@@ -51,6 +52,7 @@ add_executable(${main_exe_name}
 
     # --- SOURCES: Other C++ examples ---
     house/solid/our_house.cpp
+    house/dep/my_house.cpp
     example1.cpp
     std_function_example1.cpp
     visitor_example0.cpp
