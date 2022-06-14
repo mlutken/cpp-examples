@@ -3,6 +3,18 @@
 
 #include <functional>
 
+// References:
+// 1) http://qualityisspeed.blogspot.com/2014/08/why-i-dont-teach-solid.html
+// 2) http://qualityisspeed.blogspot.com/2014/09/beyond-solid-dependency-elimination.html
+// 3) http://qualityisspeed.blogspot.com/2015/04/dependency-elimination-example-primitive-support.html
+// 4) http://qualityisspeed.blogspot.com/2015/02/the-dependency-elimination-principle-a-canonical-example.html
+// 5) https://lostechies.com/derekgreer/2008/12/28/examining-dependency-inversion/
+// 6)
+// 7)
+// 8)
+// 9)
+
+
 namespace dep {
 
 

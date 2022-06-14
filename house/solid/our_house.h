@@ -1,6 +1,10 @@
 #ifndef OUR_HOUSE_H
 #define OUR_HOUSE_H
 
+// References:
+// 1) https://web.archive.org/web/20110714224327/http://www.objectmentor.com/resources/articles/dip.pdf
+// 2) https://en.wikipedia.org/wiki/Dependency_inversion_principle
+// 3) https://blog.ndepend.com/defense-solid-principles/
 
 namespace solid {
 
