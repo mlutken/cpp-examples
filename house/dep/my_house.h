@@ -9,14 +9,50 @@ namespace dep {
 // ************************
 // *** CONCRETE CLASSES ***
 // ************************
-// --------------------------------
-//// --- dimmer_value_validator.h ---
-//// --------------------------------
-//class dimmer_value_validator: public dimmer_value_validator_if
-//{
-//public:
-//    bool is_valid(float level) const override;
-//};
+
+enum class active_state { on, off };
+using active_slot = std::function<void (active_state)>;
+//using active_signal = std::function<active_state ()>;
+
+// --------------------
+// --- dimm_level.h ---
+// --------------------
+// Making dimmer levels "first class citizens" that can be passed around and validated.
+// Furthermore this simple class can be unit tested without any mocks in a simple strai
+// forward way involving "normal style" code and simple EXPECT_EQUAL as opposed to using
+// EXPECT_CALL.
+class dimm_level
+{
+public:
+    using slot = std::function<void (dimm_level)>;
+
+    dimm_level() = default;
+    explicit        dimm_level  (float val) : value_(val) {}
+
+    float           value       () const        { return value_;  }
+    void            set_value   (float val)     { value_ = val;   }
+    bool            is_valid    () const;
+private:
+    float value_ = 0;
+};
+
+
+
+// ----------------
+// --- button.h ---
+// ----------------
+class button
+{
+public:
+    //button() = default;   // Now we can default copnstruct. This is a good thing!
+    void            connect     (const active_slot& slot)   { slot_ = slot;     }
+    active_state    state       () const                    { return state_;    }
+    void            set_state   (active_state state)        { state_ = state;   }
+    void            detect      ();
+private:
+    active_slot     slot_;
+    active_state    state_ = active_state::off;
+};
 
 // --------------
 // --- lamp.h ---
@@ -24,32 +60,27 @@ namespace dep {
 class lamp
 {
 public:
+    active_state    lights_state    () const                { return ligths_state_; }
+    void            lights_on_off   (active_state state);
+
 private:
+    active_state ligths_state_ = active_state::off;
 };
 
 // ----------------------
 // --- kitchen_vent.h ---
 // ----------------------
-// what to do if this vent also has a light that we wish to turn on and off independetly
-// from the fan on/off ... which is common functionality in a kitchen ventilator ?
-class kitchen_vent //, public ventilator_if : No problem here since  we really ARE a ventialtor!
+class kitchen_vent //, public ventilator_if : No problem here since  we really ARE a ventialtor! In case we need to treat a number of DIFFERENT ventialator implementation instances polymorphically.
 {
 public:
+    active_state    vent_state  () const                { return vent_state_; }
+    void            vent_on_off (active_state state);
+    //void lights_on_off (active_state state); // Now we can easily add a lamp inside the ventialtor if we need .....
+
 private:
+    active_state vent_state_ = active_state::off;
 };
 
-// ----------------
-// --- button.h ---
-// ----------------
-class button
-{
-//public:
-//    button(button_client_if& bc);
-//    void set_state (bool state);
-//    bool get_state() const override;
-//private:
-//    bool state_ = false;
-};
 
 
 // ----------------
@@ -57,12 +88,16 @@ class button
 // ----------------
 class dimmer
 {
-//public:
-//    dimmer(dimmer_client_if& bc, dimmer_value_validator_if& validator);
-//    void set_level (float level);
-//    float get_dimlevel() const override;
-//private:
-//    float level_ = 0;
+public:
+//    dimmer();
+    void                connect     (const dimm_level::slot& slot)  { slot_ = slot;     }
+    const dimm_level&   level       () const                        { return level_;    }
+    void                set_level   (dimm_level level);
+    void                detect      ();
+
+private:
+    dimm_level::slot    slot_;
+    dimm_level          level_;
 };
 
 
@@ -74,17 +109,27 @@ class dimmer
 class my_house
 {
 public:
-//    void enter_kitchen (bool kitchen_lamp_state);
+    my_house();
+    void enter_kitchen (active_state kitchen_lamp_state);
 private:
-//    button_client_if&   kitchen_lamp_;
-//    button_if&          kitchen_light_switch_;
+    // NOTE: Now all members a VALUES and not just REFERENCES. C++ is very much about values.
+    //       Values are simpler to contruct, they can be passed, copied (or moved) around and they never leak memory.
+    //       Just take a look at the standard library. Except for iostreams. No inheritance in sight!
+    //       This is NOT to say inheritance or "dependency inversion" is wrong -- it's just good practice
+    //       that if you have a base class with virtual functions you really should strive to have multiple
+    //       implementations of this interface/base and use thse polymorphically.
+
+
+
+    lamp            kitchen_lamp_;          // Now the lamp really is a lamp and not a "button_client_if"
+    button          kitchen_light_switch_;  // Same for the rest...
 //    dimmer_if&          kitchen_light_dimmer_;
-//    button_client_if&   kitchen_vent_;
-//    button_if&          kitchen_vent_switch_;
+    kitchen_vent    kitchen_vent_;
+    button          kitchen_vent_switch_;
 };
 
 // -------------------
-// --- our_house.h ---
+// --- my_house.h ---
 // -------------------
 
 
@@ -94,4 +139,4 @@ int my_house_example(int argc, char** argv);
 
 
 
-#endif // OUR_HOUSE_H
+#endif // my_house_H

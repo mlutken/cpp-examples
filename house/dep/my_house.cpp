@@ -1,5 +1,6 @@
 
 #include "my_house.h"
+#include "my_house.h"
 
 
 #include <iostream>
@@ -9,109 +10,87 @@ namespace dep {
 
 
 
+
 // ************************
 // *** CONCRETE CLASSES ***
 // ************************
+// ----------------------
+// --- dimm_level.cpp ---
+// ----------------------
 
-//// ----------------------------------
-//// --- dimmer_value_validator.cpp ---
-//// ----------------------------------
-//bool dimmer_value_validator::is_valid(float level) const
-//{
-//    return 0.0f <= level && level <= 1.0f;
-//}
+bool dimm_level::is_valid() const
+{
+    return 0.0f <= value_ && value_ <= 1.0f;
+}
 
-//// ----------------
-//// --- lamp.cpp ---
-//// ----------------
-//void lamp::turn_on()
-//{
-//}
+// ------------------
+// --- button.cpp ---
+// ------------------
 
-//void lamp::turn_off()
-//{
-//}
+void button::detect()
+{
+    if (slot_) {
+        slot_(state());
+    }
+}
 
-//void lamp::do_dimm(float /*level*/)
-//{
+// ----------------
+// --- lamp.cpp ---
+// ----------------
 
-//}
-
-
-//// ------------------------
-//// --- kitchen_vent.cpp ---
-//// ------------------------
-//void kitchen_vent::turn_on()
-//{
-//}
-
-//void kitchen_vent::turn_off()
-//{
-//}
+void lamp::lights_on_off(active_state state)
+{
+    ligths_state_ = state;
+    // Do whatever is needed to actually turn on the lamp....
+}
 
 
-//// ------------------
-//// --- button.cpp ---
-//// ------------------
-//button::button(button_client_if& bc)
-//    : button_if(bc)
-//{}
+// ------------------------
+// --- kitchen_vent.cpp ---
+// ------------------------
+
+void kitchen_vent::vent_on_off(active_state state)
+{
+    vent_state_ = state;
+    // Do whatever is needed to actually turn on the ventilator ....
+}
 
 
-//void button::set_state (bool state)
-//{
-//    state_ = state;
-//}
 
-//bool button::get_state() const
-//{
-//    return state_;
-//}
+// ------------------
+// --- dimmer.cpp ---
+// ------------------
 
+void dimmer::set_level(dimm_level level)
+{
+    if (level.is_valid()) {
+        level_ = level;
+    }
+}
 
-//// ------------------
-//// --- dimmer.cpp ---
-//// ------------------
-//dimmer::dimmer(dimmer_client_if& bc, dimmer_value_validator_if& validator)
-//    : dimmer_if(bc, validator)
-//{}
-
-//void dimmer::set_level(float level)
-//{
-//    level_ = level;
-//}
+void dimmer::detect()
+{
+    if (slot_ && level().is_valid()) {
+        slot_(level());
+    }
+}
 
 
-//float dimmer::get_dimlevel() const
-//{
-//    return level_;
-//}
+// ---------------------
+// --- my_house.cpp ---
+// ---------------------
 
+my_house::my_house()
+{
+    // Wire up my house
+    kitchen_light_switch_.connect( [this](active_state state) -> void { kitchen_lamp_.lights_on_off (state);} );
+    kitchen_vent_switch_. connect( [this](active_state state) -> void { kitchen_vent_.vent_on_off   (state);} );
+}
 
-//// ---------------------
-//// --- our_house.cpp ---
-//// ---------------------
+void my_house::enter_kitchen(active_state /*kitchen_lamp_state*/)
+{
 
-
-//our_house::our_house(button_client_if& kitchen_lamp,
-//                     button_if& kitchen_light_switch,
-//                     dimmer_if& kitchen_light_dimmer,
-//                     button_client_if& kitchen_ventilator,
-//                     button_if& kitchen_vent_switch)
-//    : kitchen_lamp_(kitchen_lamp),
-//      kitchen_light_switch_(kitchen_light_switch),
-//      kitchen_light_dimmer_(kitchen_light_dimmer),
-//      kitchen_vent_(kitchen_ventilator),
-//      kitchen_vent_switch_(kitchen_vent_switch)
-
-//{
-//}
-
-//void our_house::enter_kitchen(bool /*kitchen_lamp_state*/)
-//{
-
-//}
-
+}
 
 
 
@@ -125,21 +104,14 @@ int my_house_example(int , char** )
 
 
     // Create my_house
-//    lamp kitchen_lamp;
-//    button kitchen_light_switch(kitchen_lamp); // Here we sacrificed the default constructor
-//    dimmer_value_validator dim_validator;
-//    dimmer kitchen_light_dimmer(kitchen_lamp, dim_validator);
+    // Much simpler as my house already CONTAINS all it contents as firt class VALUE members
+    // We can even make copies of our_hous without risking that we control the lights in our new
+    // neighbors house! They will most likely appreciate that :)
 
-//    kitchen_vent kitchen_ventilator;
-//    button kitchen_vent_switch(kitchen_ventilator);
+    my_house house;
+    house.enter_kitchen(active_state::on);
 
-//    our_house house(kitchen_lamp,
-//                    kitchen_light_switch,
-//                    kitchen_light_dimmer,
-//                    kitchen_ventilator,
-//                    kitchen_vent_switch);
-
-//    house.enter_kitchen(true);
+    my_house neighbor = house;  // Copy my house
 
     return 0;
 }
