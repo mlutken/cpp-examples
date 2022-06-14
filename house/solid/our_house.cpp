@@ -79,10 +79,12 @@ void lamp::do_dimm(float /*level*/)
 // ------------------------
 void kitchen_vent::turn_on()
 {
+    // Do whatever is needed to actually turn on the ventilator ....
 }
 
 void kitchen_vent::turn_off()
 {
+    // Do whatever is needed to actually turn off the ventilator ....
 }
 
 
@@ -93,16 +95,6 @@ button::button(button_client_if& bc)
     : button_if(bc)
 {}
 
-
-void button::set_state (bool state)
-{
-    state_ = state;
-}
-
-bool button::get_state() const
-{
-    return state_;
-}
 
 
 // ------------------

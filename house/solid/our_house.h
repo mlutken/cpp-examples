@@ -18,8 +18,8 @@ namespace solid {
 class button_client_if
 {
 public:
-    virtual void turn_on() = 0;
-    virtual void turn_off() = 0;
+    virtual void turn_on    () = 0;
+    virtual void turn_off   () = 0;
 };
 
 // --------------------------
@@ -28,7 +28,7 @@ public:
 class dimmer_client_if
 {
 public:
-    virtual void do_dimm(float level) = 0;
+    virtual void do_dimm    (float level) = 0;
 };
 
 
@@ -38,9 +38,9 @@ public:
 class button_if
 {
 public:
-    explicit button_if(button_client_if& bc);
-    void detect();
-    virtual bool get_state() const = 0;
+    explicit        button_if   (button_client_if& bc);
+    void            detect      ();
+    virtual bool    get_state   () const = 0;
 private:
     button_client_if& button_client_;
 };
@@ -51,7 +51,7 @@ private:
 class dimmer_value_validator_if
 {
 public:
-    virtual bool is_valid(float level) const = 0;
+    virtual bool is_valid       (float level) const = 0;
 };
 
 // -------------------
@@ -60,12 +60,12 @@ public:
 class dimmer_if
 {
 public:
-    explicit dimmer_if(dimmer_client_if& dc, dimmer_value_validator_if& validator);
-    void detect();
-    virtual float get_dimm_level() const = 0;
+    explicit        dimmer_if       (dimmer_client_if& dc, dimmer_value_validator_if& validator);
+    void            detect          ();
+    virtual float   get_dimm_level  () const = 0;
 private:
-    dimmer_client_if& dimmer_client_;
-    dimmer_value_validator_if& validator_;
+    dimmer_client_if&           dimmer_client_;
+    dimmer_value_validator_if&  validator_;
 };
 
 
@@ -88,9 +88,9 @@ public:
 class lamp : public button_client_if, public dimmer_client_if
 {
 public:
-    void turn_on() override;
-    void turn_off() override;
-    void do_dimm(float level) override;
+    void turn_on    () override;
+    void turn_off   () override;
+    void do_dimm    (float level) override;
 };
 
 // ----------------------
@@ -101,8 +101,8 @@ public:
 class kitchen_vent : public button_client_if //, public ventilator_if ?
 {
 public:
-    void turn_on() override;
-    void turn_off() override;
+    void turn_on    () override;
+    void turn_off   () override;
 };
 
 // ----------------
@@ -112,8 +112,8 @@ class button: public button_if
 {
 public:
     button(button_client_if& bc);
-    void set_state (bool state);
-    bool get_state() const override;
+    void    set_state   (bool state)        { state_ = state; }
+    bool    get_state   () const override   { return state_;  }
 private:
     bool state_ = false;
 };
