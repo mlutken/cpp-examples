@@ -37,7 +37,7 @@ dimmer_if::dimmer_if(dimmer_client_if& dc, dimmer_value_validator_if& validator)
 
 void dimmer_if::detect()
 {
-    const float level = get_dimlevel();
+    const float level = get_dimm_level();
     if (validator_.is_valid(level)) {
         dimmer_client_.do_dimm(level);
     }
@@ -60,15 +60,17 @@ bool dimmer_value_validator::is_valid(float level) const
 // ----------------
 void lamp::turn_on()
 {
+    // Do whatever is needed to actually turn on the lamp....
 }
 
 void lamp::turn_off()
 {
+    // Do whatever is needed to actually turn off the lamp....
 }
 
 void lamp::do_dimm(float /*level*/)
 {
-
+    // Do whatever is needed to actually dimm the lamp....
 }
 
 
@@ -116,7 +118,7 @@ void dimmer::set_level(float level)
 }
 
 
-float dimmer::get_dimlevel() const
+float dimmer::get_dimm_level() const
 {
     return level_;
 }

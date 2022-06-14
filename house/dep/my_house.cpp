@@ -40,8 +40,16 @@ void button::detect()
 
 void lamp::lights_on_off(active_state state)
 {
-    ligths_state_ = state;
+    lights_state_ = state;
     // Do whatever is needed to actually turn on the lamp....
+}
+
+void lamp::do_dimm(const dimm_level& level)
+{
+    if (level.is_valid()) {
+        lights_dimm_level_ = level;
+        // Do whatever is needed to actually dimm the lamp....
+    }
 }
 
 
@@ -83,8 +91,9 @@ void dimmer::detect()
 my_house::my_house()
 {
     // Wire up my house
-    kitchen_light_switch_.connect( [this](active_state state) -> void { kitchen_lamp_.lights_on_off (state);} );
-    kitchen_vent_switch_. connect( [this](active_state state) -> void { kitchen_vent_.vent_on_off   (state);} );
+    kitchen_light_switch_.connect( [this](active_state state)    -> void { kitchen_lamp_.lights_on_off  (state); }  );
+    kitchen_light_dimmer_.connect( [this](const dimm_level& lvl) -> void { kitchen_lamp_.do_dimm        (lvl);   }  );
+    kitchen_vent_switch_. connect( [this](active_state state)    -> void { kitchen_vent_.vent_on_off    (state); }  );
 }
 
 void my_house::enter_kitchen(active_state /*kitchen_lamp_state*/)

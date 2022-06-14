@@ -1,7 +1,6 @@
 #ifndef OUR_HOUSE_H
 #define OUR_HOUSE_H
 
-//#include <vector>
 
 namespace solid {
 
@@ -48,10 +47,7 @@ private:
 class dimmer_value_validator_if
 {
 public:
-//    explicit dimmer_value_validator_if(dimmer_client_if& dc);
     virtual bool is_valid(float level) const = 0;
-//private:
-//    dimmer_client_if& dimmer_client_;
 };
 
 // -------------------
@@ -62,7 +58,7 @@ class dimmer_if
 public:
     explicit dimmer_if(dimmer_client_if& dc, dimmer_value_validator_if& validator);
     void detect();
-    virtual float get_dimlevel() const = 0;
+    virtual float get_dimm_level() const = 0;
 private:
     dimmer_client_if& dimmer_client_;
     dimmer_value_validator_if& validator_;
@@ -127,7 +123,7 @@ class dimmer: public dimmer_if
 public:
     dimmer(dimmer_client_if& bc, dimmer_value_validator_if& validator);
     void set_level (float level);
-    float get_dimlevel() const override;
+    float get_dimm_level() const override;
 private:
     float level_ = 0;
 };

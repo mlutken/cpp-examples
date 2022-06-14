@@ -60,11 +60,14 @@ private:
 class lamp
 {
 public:
-    active_state    lights_state    () const                { return ligths_state_; }
-    void            lights_on_off   (active_state state);
+    active_state        lights_state        () const                { return lights_state_; }
+    const dimm_level&   lights_dimm_level   () const                { return lights_dimm_level_;   }
+    void                lights_on_off       (active_state state);
+    void                do_dimm             (const dimm_level& level);
 
 private:
-    active_state ligths_state_ = active_state::off;
+    active_state    lights_state_       = active_state::off;
+    dimm_level      lights_dimm_level_;
 };
 
 // ----------------------
@@ -120,10 +123,9 @@ private:
     //       implementations of this interface/base and use thse polymorphically.
 
 
-
     lamp            kitchen_lamp_;          // Now the lamp really is a lamp and not a "button_client_if"
     button          kitchen_light_switch_;  // Same for the rest...
-//    dimmer_if&          kitchen_light_dimmer_;
+    dimmer          kitchen_light_dimmer_;
     kitchen_vent    kitchen_vent_;
     button          kitchen_vent_switch_;
 };
